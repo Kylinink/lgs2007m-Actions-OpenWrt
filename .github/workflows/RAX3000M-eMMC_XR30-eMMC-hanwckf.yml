@@ -21,12 +21,13 @@ on:
       WIFI_DRIVER:
         description: 'Choose WiFi Driver'
         required: true
-        default: 'v7.6.7.2-fw-20240823(recommend)'
+        default: 'v7.6.7.3-fw-default'
         type: choice
         options:
+        - v7.6.7.3-fw-20250408(recommend)
         - v7.6.7.2-fw-20240823(recommend)
         - v7.6.6.1-fw-20230306(recommend)
-        - v7.6.7.2-fw-default
+        - v7.6.7.3-fw-default
         - v7.6.7.2-fw-20230306
         - v7.6.7.2-fw-20230330
         - v7.6.7.2-fw-20230411
@@ -79,7 +80,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     permissions:
       contents: write
@@ -170,12 +171,12 @@ jobs:
         wifi_driver=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/^(v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/')
         firmware=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/.*fw-([0-9]{8}|default).*/\1/g')
         if [ "$wifi_driver" == "v7.6.6.1" ]; then
-                sed -i 's/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7672=y/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7661=y/g' .config
+                sed -i 's/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7673=y/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7661=y/g' .config
         fi
         if [ "$firmware" == "default" ]; then
-                sed -i 's/CONFIG_MTK_MT_WIFI_MT7981_20240823=y/CONFIG_MTK_MT_WIFI_MT7981_DEFAULT_FIRMWARE=y/g' .config
+                sed -i 's/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7673=y/CONFIG_MTK_MT_WIFI_MT7981_DEFAULT_FIRMWARE=y/g' .config
         else
-        	sed -i 's/CONFIG_MTK_MT_WIFI_MT7981_20240823=y/CONFIG_MTK_MT_WIFI_MT7981_${firmware}=y/g' .config
+        	sed -i 's/CONFIG_MTK_MT_WIFI_MT7981_20250408=y/CONFIG_MTK_MT_WIFI_MT7981_${firmware}=y/g' .config
         fi
         echo "Use WiFi Driver: $wifi_driver-fw-$firmware"
 
@@ -241,7 +242,7 @@ jobs:
         if grep -q 'CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7661=y' .config; then
                 echo "WIFI_VERSION=-v7661" >> $GITHUB_ENV
         else
-                echo "WIFI_VERSION=-v7672" >> $GITHUB_ENV
+                echo "WIFI_VERSION=-v7673" >> $GITHUB_ENV
         fi
         if [ ${{ github.event.inputs.EEPROM }} == 'true' ]; then
                 echo "EEPROM=-eeprom" >> $GITHUB_ENV
