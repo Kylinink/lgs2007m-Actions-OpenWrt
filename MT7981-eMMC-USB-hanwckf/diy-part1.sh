@@ -36,6 +36,6 @@ echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf
 git clone https://github.com/sbwml/luci-app-openlist2 package/openlist2
 git clone https://github.com/lgs2007m/luci-app-easytier package/easytier
 git clone https://github.com/destan19/OpenAppFilter package/OpenAppFilter
-git_sparse_clone dev https://github.com/vernesong/OpenClash luci-app-openclash
+git_sparse_clone master https://github.com/vernesong/OpenClash luci-app-openclash
 git clone --depth=1 https://github.com/laipeng668/luci-app-gecoosac package/luci-app-gecoosac
 git clone --depth=1 https://github.com/gdy666/luci-app-lucky package/lucky
